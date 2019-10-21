@@ -1,33 +1,58 @@
 #!/usr/bin/env python3
 
-
+import numpy as np
+import time
 import pyaudio
 import wave
 import pygame
 
-def play_sound(key):
+def play_sound(key, p):
     filename = key + '.wav'
-    chunk = 1024  # Set chunk size of 1024 samples per data frame
-    wf = wave.open(filename, 'rb') # Open the sound file 
-    p = pyaudio.PyAudio()
+    wf = wave.open(filename, 'r')
+    
+    def callback(in_data, frame_count, time_info, flag):
+        data = wf.readframes(frame_count)
+        return (data, pyaudio.paContinue)
 
-    # Open a .Stream object to write the WAV file to
     stream = p.open(format = p.get_format_from_width(wf.getsampwidth()),
                     channels = wf.getnchannels(),
                     rate = wf.getframerate(),
-                    output = True)
+                    output = True,
+                    stream_callback=callback)
 
-    data = wf.readframes(chunk) # Read data in chunks
+    stream.start_stream()
+    while stream.is_active():
+        time.sleep(0.1)
 
-    # Play the sound by writing the audio data to the stream
-    while data != '':
-        stream.write(data)
-        data = wf.readframes(chunk)
-
+    stream.stop_stream()
     stream.close()
-    p.terminate()
 
 def main():
-    play_sound('K_a')
+    keys = []
+    p = pyaudio.PyAudio()
 
-main()
+    with open('mappings.conf', 'r') as f:
+        for line in f:
+            keys.append(line.strip())
+
+    screen = pygame.display.set_mode((500, 500))
+
+    while True:
+        event = pygame.event.wait()
+        if event.type == pygame.KEYDOWN:
+            key = pygame.key.name(event.key)
+            print(key)
+
+            if event.key == pygame.K_ESCAPE:
+                pygame.quit()
+                p.terminate()
+                raise KeyboardInterrupt
+            elif key in keys:
+                play_sound(key, p)
+
+
+if __name__ == '__main__':
+    try:
+        main()
+    except KeyboardInterrupt:
+        print('Goodbye')
