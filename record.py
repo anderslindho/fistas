@@ -44,6 +44,6 @@ def record_sound(key):
     wf.close()
 
 def main():
-    record_sound(key)
+    record_sound('output')
 
 main()
