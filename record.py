@@ -14,7 +14,7 @@ def record_sound(key):
 
     p = pyaudio.PyAudio()  # Create an interface to PortAudio
 
-    print('Recording')
+    print(f'Recording {key}')
 
     stream = p.open(format=sample_format,
                     channels=channels,
@@ -44,6 +44,14 @@ def record_sound(key):
     wf.close()
 
 def main():
-    record_sound('output')
+    keys = []
+
+    with open('mappings.conf', 'r') as f:
+        for line in f:
+            keys.append(line.strip())
+
+    for key in keys:
+        record_sound(key)
+
 
 main()

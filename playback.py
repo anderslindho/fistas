@@ -3,6 +3,7 @@
 
 import pyaudio
 import wave
+import pygame
 
 def play_sound(key):
     filename = key + '.wav'
@@ -27,6 +28,6 @@ def play_sound(key):
     p.terminate()
 
 def main():
-    play_sound('output')
+    play_sound('K_a')
 
 main()
