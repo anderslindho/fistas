@@ -17,7 +17,7 @@ def main():
         for line in f:
             keys.append(line.strip())
 
-    screen = pygame.display.set_mode((0, 0))
+    screen = pygame.display.set_mode((1, 1))
     while True:
         event = pygame.event.wait()
         if event.type == pygame.KEYDOWN:
