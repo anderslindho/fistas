@@ -12,6 +12,12 @@ def play_sound(key, sounds, loop=False):
     sounds[key].play(-1) if loop else sounds[key].play()
 
 def main():
+    fade_time = 50 # ms
+    freq = 22050 # Hz
+    size = -16 # bits
+    channels = 32
+    block = 500 # buffer size
+
     keys = []
     keymods = []
     sounds = {}
@@ -19,7 +25,7 @@ def main():
         for line in f:
             keys.append(line.strip())
 
-    pygame.mixer.init(frequency=22050, size=-16, channels=32, buffer=500)
+    pygame.mixer.init(frequency=freq, size=size, channels=channels, buffer=block)
     for key in keys:
         create_sound(key, sounds)
 
@@ -37,7 +43,7 @@ def main():
                     pygame.quit()
                     raise KeyboardInterrupt
             elif event.type == pygame.KEYUP and key in keys:
-                sounds[key].fadeout(50)
+                sounds[key].fadeout(fade_time)
                 is_playing[key] = False
 
 
