@@ -4,7 +4,7 @@ import numpy as np
 import pygame
 
 def play_sound(key):
-    pygame.mixer.init(frequency=22050, size=-16, channels=2, buffer=4096)
+    pygame.mixer.init(frequency=22050, size=-16, channels=1, buffer=4096)
     filename = key + '.wav'
     sound = pygame.mixer.Sound(filename)
     snd_array = pygame.sndarray.array(sound)
@@ -13,13 +13,11 @@ def play_sound(key):
 
 def main():
     keys = []
-
     with open('mappings.conf', 'r') as f:
         for line in f:
             keys.append(line.strip())
 
-    screen = pygame.display.set_mode((500, 500))
-
+    screen = pygame.display.set_mode((0, 0))
     while True:
         event = pygame.event.wait()
         if event.type == pygame.KEYDOWN:

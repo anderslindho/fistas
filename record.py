@@ -43,7 +43,7 @@ def main():
         for line in f:
             keys.append(line.strip())
 
-    print(f'Will record ')
+    print(f'Will record {len(keys)} keys')
     for key in keys:
         record_sound(key)
 
