@@ -4,16 +4,17 @@ import numpy as np
 import pygame
 
 
-def play_sound(key):
+def play_sound(key, loop=False):
     pygame.mixer.init(frequency=22050, size=-16, channels=1, buffer=4096)
     filename = key + '.wav'
     sound = pygame.mixer.Sound(filename)
     snd_array = pygame.sndarray.array(sound)
     snd_out = pygame.sndarray.make_sound(snd_array)
-    snd_out.play()
+    snd_out.play(-1) if loop else snd_out.play()
 
 def main():
     keys = []
+    keymods = []
     with open('keys.conf', 'r') as f:
         for line in f:
             keys.append(line.strip())
@@ -24,7 +25,10 @@ def main():
         if event.type == pygame.KEYDOWN:
             key = pygame.key.name(event.key)
             if key in keys:
-                play_sound(key)
+                if key == 'a':
+                    play_sound(key, True)
+                else: 
+                    play_sound(key)
             elif event.key == pygame.K_ESCAPE:
                 pygame.quit()
                 raise KeyboardInterrupt
