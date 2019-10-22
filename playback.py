@@ -22,12 +22,11 @@ def main():
         event = pygame.event.wait()
         if event.type == pygame.KEYDOWN:
             key = pygame.key.name(event.key)
-
-            if event.key == pygame.K_ESCAPE:
+            if key in keys:
+                play_sound(key)
+            elif event.key == pygame.K_ESCAPE:
                 pygame.quit()
                 raise KeyboardInterrupt
-            elif key in keys:
-                play_sound(key)
 
 
 if __name__ == '__main__':
