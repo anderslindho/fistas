@@ -7,7 +7,7 @@ import wave
 def record_sound(key):
     chunk = 4096  # samples per chunk
     sample_format = pyaudio.paInt16  # bits per sample (ADC val)
-    channels = 2 # mono/stereo
+    channels = 1 # mono/stereo
     freq = 22050  # samples per second
     clip_length = 3 # seconds
     filename = key + '.wav'
