@@ -12,10 +12,11 @@ def record_sound(key):
     clip_length = 3 # seconds
     filename = key + '.wav'
     frames = []
-    
+    wait = 0.5
+
     p = pyaudio.PyAudio()
     print(f'Recording {key}')
-    time.sleep(0.3)
+    time.sleep(wait)
     stream = p.open(format=sample_format,
                     channels=channels,
                     rate=freq,
@@ -27,7 +28,6 @@ def record_sound(key):
     stream.stop_stream()
     stream.close()
     p.terminate()
-
     print('Finished recording, saving to file...')
 
     wf = wave.open(filename, 'wb')
