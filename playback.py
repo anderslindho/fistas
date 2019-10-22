@@ -24,20 +24,21 @@ def main():
         create_sound(key, sounds)
 
     screen = pygame.display.set_mode((1, 1))
+    is_playing = {k: False for k in keys}
     while True:
         event = pygame.event.wait()
-        if event.type == pygame.KEYDOWN:
+        if event.type in (pygame.KEYDOWN, pygame.KEYUP):
             key = pygame.key.name(event.key)
-            if key in keys:
-                if key == 'a':
+            if event.type == pygame.KEYDOWN:    
+                if key in keys:
                     play_sound(key, sounds, True)
-                elif key == 'g':
-                    pygame.mixer.stop()
-                else: 
-                    play_sound(key, sounds)
-            elif event.key == pygame.K_ESCAPE:
-                pygame.quit()
-                raise KeyboardInterrupt
+                    is_playing[key] = True
+                elif event.key == pygame.K_ESCAPE:
+                    pygame.quit()
+                    raise KeyboardInterrupt
+            elif event.type == pygame.KEYUP and key in keys:
+                sounds[key].fadeout(50)
+                is_playing[key] = False
 
 
 if __name__ == '__main__':
