@@ -3,6 +3,7 @@
 import numpy as np
 import pygame
 
+
 def play_sound(key):
     pygame.mixer.init(frequency=22050, size=-16, channels=1, buffer=4096)
     filename = key + '.wav'
@@ -13,7 +14,7 @@ def play_sound(key):
 
 def main():
     keys = []
-    with open('mappings.conf', 'r') as f:
+    with open('keys.conf', 'r') as f:
         for line in f:
             keys.append(line.strip())
 

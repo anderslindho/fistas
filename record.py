@@ -39,7 +39,7 @@ def record_sound(key):
 
 def main():
     keys = []
-    with open('mappings.conf', 'r') as f:
+    with open('keys.conf', 'r') as f:
         for line in f:
             keys.append(line.strip())
 
