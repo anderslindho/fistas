@@ -5,7 +5,6 @@ import pygame
 
 
 def play_sound(key, loop=False):
-    pygame.mixer.init(frequency=22050, size=-16, channels=1, buffer=4096)
     filename = key + '.wav'
     sound = pygame.mixer.Sound(filename)
     snd_array = pygame.sndarray.array(sound)
@@ -20,6 +19,7 @@ def main():
             keys.append(line.strip())
 
     screen = pygame.display.set_mode((1, 1))
+    pygame.mixer.init(frequency=22050, size=-16, channels=32, buffer=4096)
     while True:
         event = pygame.event.wait()
         if event.type == pygame.KEYDOWN:
@@ -27,6 +27,8 @@ def main():
             if key in keys:
                 if key == 'a':
                     play_sound(key, True)
+                elif key == 'g':
+                    pygame.mixer.quit()
                 else: 
                     play_sound(key)
             elif event.key == pygame.K_ESCAPE:
