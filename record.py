@@ -12,10 +12,10 @@ def record_sound(key):
     clip_length = 2.5 # seconds
     filename = key + '.wav'
     frames = []
-    delay = 0.5 # seconds
+    delay = 0.1 # seconds
 
     p = pyaudio.PyAudio()
-    print(f'Recording {key}')
+    input(f'Recording {key}, press Enter to start')
     time.sleep(delay)
     stream = p.open(format=sample_format,
                     channels=channels,

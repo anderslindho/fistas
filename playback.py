@@ -12,14 +12,13 @@ def play_sound(key, sounds, loop=False):
     sounds[key].play(-1) if loop else sounds[key].play()
 
 def main():
-    fade_time = 50 # ms
+    fade_time = 100 # ms
     freq = 22050 # Hz
     size = -16 # bits
     channels = 32
-    block = 500 # buffer size
+    block = 256 # buffer size
 
     keys = []
-    keymods = []
     sounds = {}
     with open('keys.conf', 'r') as f:
         for line in f:
@@ -29,7 +28,11 @@ def main():
     for key in keys:
         create_sound(key, sounds)
 
-    screen = pygame.display.set_mode((1, 1))
+    screen = pygame.display.set_mode(size=(480, 360))
+    screen.fill([60, 140, 180])
+    pygame.display.set_caption('Fistas')
+    pygame.display.flip()
+
     is_playing = {k: False for k in keys}
     while True:
         event = pygame.event.wait()
