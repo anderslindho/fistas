@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 
+import time
 import numpy as np
 import pygame
 
@@ -28,23 +29,23 @@ def main():
     pygame.mixer.init(frequency=freq, size=size, channels=channels, buffer=block)
     for key in keys:
         create_sound(key, sounds)
+        time.sleep(0.1)
 
     screen = pygame.display.set_mode((1, 1))
-    is_playing = {k: False for k in keys}
     while True:
         event = pygame.event.wait()
-        if event.type in (pygame.KEYDOWN, pygame.KEYUP):
+        if event.type == pygame.KEYDOWN:    
             key = pygame.key.name(event.key)
-            if event.type == pygame.KEYDOWN:    
-                if key in keys:
+            if key in keys:
+                if key == 'f':
+                    pygame.mixer.stop()
+                elif key in ('w', 'a'):
                     play_sound(key, sounds, True)
-                    is_playing[key] = True
-                elif event.key == pygame.K_ESCAPE:
-                    pygame.quit()
-                    raise KeyboardInterrupt
-            elif event.type == pygame.KEYUP and key in keys:
-                sounds[key].fadeout(fade_time)
-                is_playing[key] = False
+                else:
+                    play_sound(key, sounds)
+            elif event.key == pygame.K_ESCAPE:
+                pygame.quit()
+                raise KeyboardInterrupt
 
 
 if __name__ == '__main__':
