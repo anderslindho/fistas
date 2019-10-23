@@ -30,16 +30,12 @@ def main():
         create_sound(key, sounds)
         time.sleep(0.1)
 
-<<<<<<< HEAD
-    screen = pygame.display.set_mode((1, 1))
-=======
     screen = pygame.display.set_mode(size=(480, 360))
-    screen.fill([60, 140, 180])
+    screen.fill([60, 180, 140])
     pygame.display.set_caption('Fistas')
     pygame.display.flip()
 
     is_playing = {k: False for k in keys}
->>>>>>> add_visuals
     while True:
         event = pygame.event.wait()
         if event.type == pygame.KEYDOWN:    
