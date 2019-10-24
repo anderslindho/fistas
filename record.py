@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 
+import sys
 import time
 import pyaudio
 import wave
@@ -39,13 +40,17 @@ def record_sound(key):
 
 def main():
     keys = []
-    with open('keys.conf', 'r') as f:
-        for line in f:
-            keys.append(line.strip())
 
-    print(f'Will record {len(keys)} keys')
-    for key in keys:
-        record_sound(key)
+    if (len(sys.argv) == 0):
+        with open('keys.conf', 'r') as f:
+            for line in f:
+                keys.append(line.strip())
+        print(f'Will record {len(keys)} keys')
+        for key in keys:
+            record_sound(key)
+    else:
+        for key in sys.argv[1:]:
+            record_sound(key)
 
 
 if __name__ == '__main__':
