@@ -10,7 +10,7 @@ def record_sound(key):
     sample_format = pyaudio.paInt16  # bits per sample (ADC val)
     channels = 1 # mono/stereo
     freq = 22050  # samples per second
-    clip_length = 2.5 # seconds
+    clip_length = 2.0 # seconds
     filename = key + '.wav'
     frames = []
     delay = 0.1 # seconds
