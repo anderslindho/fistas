@@ -41,7 +41,7 @@ def record_sound(key):
 def main():
     keys = []
 
-    if (len(sys.argv) == 0):
+    if (len(sys.argv) == 1):
         with open('keys.conf', 'r') as f:
             for line in f:
                 keys.append(line.strip())
