@@ -11,3 +11,8 @@ Listens for keypresses and plays associated audio
 
 ## keys.conf
 Valid keys (for scan-record and for playback)
+
+# Prereqs
+- pyaudio
+- pygame
+- numpy
