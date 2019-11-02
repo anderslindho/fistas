@@ -1,8 +1,13 @@
 # Fistas
 Two small scripts and a config file for available keys
 
-## record.py 
-records a 3 sec long wav for each key in mappings.conf
+## record 
+Records a 3 sec long wav for each key in mappings.conf
+args: keys that you want to record (e.g. use like `./record w a s d`)
+if no args it will scan all keys in keys.conf
 
-## playback.py
-listens for keypresses and plays associated audio
+## playback
+Listens for keypresses and plays associated audio
+
+## keys.conf
+Valid keys (for scan-record and for playback)
