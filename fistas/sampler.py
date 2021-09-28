@@ -12,13 +12,7 @@ class Sampler:
 
         self.sounds = {}
 
-    def run(self, record_mode: bool = False):
-        if record_mode:
-            self.record()
-        else:
-            self.playback()
-
-    def playback(self):
+    def run(self):
         pygame.mixer.init(
             frequency=self.frequency,
             size=self.sample_size,
@@ -44,11 +38,12 @@ class Sampler:
                         self.play_sound(key, True)
                         is_playing[key] = True
                     elif event.key == pygame.K_ESCAPE:
-                        pygame.quit()
-                        raise KeyboardInterrupt
+                        break
                 elif event.type == pygame.KEYUP and key in self.keys:
                     self.sounds[key].fadeout(self.fade_time_ms)
                     is_playing[key] = False
+
+        pygame.quit()
 
     def create_sound(self, key):
         filename = key + ".wav"

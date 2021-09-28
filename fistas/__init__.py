@@ -23,7 +23,7 @@ class Application:
         if record_mode:
             self.record()
         else:
-            self.sampler.run(record_mode)
+            self.sampler.run()
 
     def record(self):
         for key in KEYS:
