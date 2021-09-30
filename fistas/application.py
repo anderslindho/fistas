@@ -1,32 +1,14 @@
-from pathlib import Path
-import sys
-from PySide2.QtGui import QWindow
-
-from PySide2.QtWidgets import QApplication, QHBoxLayout, QLabel, QVBoxLayout, QWidget, QFileDialog, QMainWindow
+from PySide2.QtWidgets import QApplication, QWidget
 from PySide2.QtMultimedia import QSound
-from PySide2.QtCore import Qt, Slot
+from PySide2.QtCore import Qt
 
 
 
 import logging
-logging.basicConfig(level=logging.DEBUG)
+#logging.basicConfig(level=logging.WARNING)
 
 
 class Sampler:
-    keymap = {
-        Qt.Key_A: "a",
-        Qt.Key_W: "w",
-        Qt.Key_S: "s",
-        Qt.Key_D: "d",
-        Qt.Key_F: "f",
-        Qt.Key_Space: " ",
-        Qt.Key_Left: "left",
-        Qt.Key_Right: "right",
-        Qt.Key_Up: "up",
-        Qt.Key_Down: "down",
-        Qt.Key_Enter: "enter",
-    }
-
     def __init__(self):
         self.sounds = {}
 
@@ -37,13 +19,15 @@ class Sampler:
 
     def play(self, key):
         try:
-            self.sounds[self.keymap[key]].play()
+            self.sounds[key].play()
         except KeyError:
             return
+        else:
+            logging.debug(f"playing {key=}")
 
     def silence(self, key):
         try:
-            self.sounds[self.keymap[key]].stop()
+            self.sounds[key].stop()
         except KeyError:
             return
         else:
@@ -51,7 +35,7 @@ class Sampler:
 
     def loop(self, key):
         try:
-            self.sounds[self.keymap[key]].setLoops(-1)
+            self.sounds[key].setLoops(-1)
         except KeyError:
             return
         else:
@@ -64,15 +48,33 @@ class MainWindow(QWidget):
         self.setWindowTitle("fistas")
 
         self.sampler = Sampler()
+        # possible keys:
+        # Qt.Key_A,
+        # Qt.Key_W,
+        # Qt.Key_S,
+        # Qt.Key_D,
+        # Qt.Key_F,
+        # Qt.Key_Space,
+        # Qt.Key_Left,
+        # Qt.Key_Right,
+        # Qt.Key_Up,
+        # Qt.Key_Down,
+        # Qt.Key_Enter,
 
-        self.sampler.load_sound("space.wav", "w")
-        self.sampler.load_sound("s.wav", "a")
+        self.sampler.load_sound("space.wav", Qt.Key_W)
+        self.sampler.load_sound("s.wav", Qt.Key_A)
+        self.sampler.load_sound("down.wav", Qt.Key_S)
+        self.sampler.load_sound("d.wav", Qt.Key_D)
 
     def keyPressEvent(self, event):
         if (event.modifiers() & Qt.ShiftModifier):
             self.sampler.loop(event.key())
         elif (event.modifiers() & Qt.ControlModifier):
             self.sampler.silence(event.key())
+        elif (event.modifiers() & Qt.AltModifier):
+            pass
+        elif (event.modifiers() & Qt.MetaModifier):
+            pass
         else:
             self.sampler.play(event.key())
 
