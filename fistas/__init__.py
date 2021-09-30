@@ -1,4 +1,5 @@
 import argparse
+from abc import abstractmethod
 import time
 import wave
 
@@ -11,64 +12,97 @@ from fistas.sampler import Sampler
 # should be: "w a s d f up down left right space"
 KEYS = set("w a s d".split())
 
-CLIP_LENGTH = 2.5
 DELAY_BEFORE_RECORDING = 0.1
 
 
-class Application:
-    def __init__(self):
-        self.sampler = Sampler(KEYS)
+class OStream:
+    chunk = 1024
 
-    def run(self, record_mode: bool = False):
-        if record_mode:
-            self.record()
-        else:
-            self.sampler.run()
+    def __init__(self, filename, modify = 1):
+        self.ctx = pyaudio.PyAudio()
+        self.wf = wave.open(filename, 'rb')
+        self.stream = self.ctx.open(
+            format = self.ctx.get_format_from_width(self.wf.getsampwidth()),
+            channels = self.wf.getnchannels(),
+            rate = int(modify * self.wf.getframerate()),
+            output = True,
+        )
 
-    def record(self):
-        for key in KEYS:
-            self.record_sound(key)
+    def write(self):
+        while True:
+            data = self.wf.readframes(self.chunk)
+            if not data:
+                break
+            self.stream.write(data)
 
-    def record_sound(self, key):
-        chunk = 4096  # samples per chunk
-        sample_format = pyaudio.paInt16  # bits per sample (ADC val)
-        channels = 1  # mono/stereo
-        frequency = 22050
+    def close(self):
+        self.stream.close()
+        self.ctx.terminate()
 
-        p = pyaudio.PyAudio()
+class IStream:
+    chunk = 4096
+    sample_format = pyaudio.paInt16
+    channels = 1
+    frequency = 22050
 
-        input(f"Recording {key}, press Enter to start")
-        time.sleep(DELAY_BEFORE_RECORDING)
-
-        stream = p.open(
-            format=sample_format,
-            channels=channels,
-            rate=frequency,
-            frames_per_buffer=chunk,
+    def __init__(self, filename, length = 2):
+        self.length = length
+        self.ctx = pyaudio.PyAudio()
+        self.wf = wave.open(filename, 'wb')
+        self.wf.setnchannels(self.channels)
+        self.wf.setsampwidth(self.ctx.get_sample_size(self.sample_format))
+        self.wf.setframerate(self.frequency)
+        self.stream = self.ctx.open(
+            format=self.sample_format,
+            channels=self.channels,
+            rate=self.frequency,
+            frames_per_buffer=self.chunk,
             input=True,
         )
+
+    def write(self):
         frames = []
-        for _ in range(0, int(frequency / chunk * CLIP_LENGTH)):
-            data = stream.read(chunk)
+        for _ in range(0, int(self.frequency / self.chunk * self.length)):
+            data = self.stream.read(self.chunk)
             frames.append(data)
-        stream.stop_stream()
-        stream.close()
+        self.stream.stop_stream()
+        self.wf.writeframes(b"".join(frames))
 
-        p.terminate()
-        print("Finished recording, saving to file...")
+    def close(self):
+        self.stream.close()
+        self.ctx.terminate()
 
-        wf = wave.open(key + ".wav", "wb")
-        wf.setnchannels(channels)
-        wf.setsampwidth(p.get_sample_size(sample_format))
-        wf.setframerate(frequency)
-        wf.writeframes(b"".join(frames))
-        wf.close()
+
+import threading
+
+class Application:
+    def __init__(self):
+        pass
+
+    def run(self):
+        self.record_sound("d")
+        self.play_sound("d")
+        time.sleep(0.5)
+        for i in range(10):
+            threading.Thread(target=self.play_sound, args=('d', 1.5 - i * 0.1), daemon=False).start()
+            time.sleep(0.1)
+        #self.play_sound("d", 0.6)
+        #self.play_sound("d", 1.2)
+
+    def play_sound(self, key, modify = 1):
+        oas = OStream(f"{key}.wav", modify)
+        oas.write()
+        oas.close()
+
+    def record_sound(self, key):
+        ias = IStream(f"{key}.wav")
+        ias.write()
+        ias.close()
 
 
 def main():
     parser = argparse.ArgumentParser()
-    parser.add_argument("-r", "--record", action="store_true")
     args = parser.parse_args()
 
     app = Application()
-    app.run(args.record)
+    app.run()
