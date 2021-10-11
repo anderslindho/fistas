@@ -1,11 +1,11 @@
+import logging
+
 from PySide2.QtWidgets import QApplication, QWidget
 from PySide2.QtMultimedia import QSound
 from PySide2.QtCore import Qt
 
 
-
-import logging
-#logging.basicConfig(level=logging.WARNING)
+logging.basicConfig(level=logging.WARNING)
 
 
 class Sampler:
@@ -69,7 +69,7 @@ class MainWindow(QWidget):
         self.sampler.load_sound("bass.wav", Qt.Key_Up)
         self.sampler.load_sound("bass.wav", Qt.Key_Down)
         self.sampler.load_sound("hihat.wav", Qt.Key_Left)
-        self.sampler.load_sound("test.wav.wav", Qt.Key_Right)
+        self.sampler.load_sound("test.wav", Qt.Key_Right)
 
     def keyPressEvent(self, event):
         if (event.modifiers() & Qt.ShiftModifier):
