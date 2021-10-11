@@ -69,6 +69,7 @@ class MainWindow(QWidget):
         self.sampler.load_sound("bass.wav", Qt.Key_Up)
         self.sampler.load_sound("bass.wav", Qt.Key_Down)
         self.sampler.load_sound("hihat.wav", Qt.Key_Left)
+        self.sampler.load_sound("test.wav.wav", Qt.Key_Right)
 
     def keyPressEvent(self, event):
         if (event.modifiers() & Qt.ShiftModifier):
