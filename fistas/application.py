@@ -48,6 +48,7 @@ class MainWindow(QWidget):
         self.setWindowTitle("fistas")
 
         self.sampler = Sampler()
+
         # possible keys:
         # Qt.Key_A,
         # Qt.Key_W,
@@ -61,10 +62,13 @@ class MainWindow(QWidget):
         # Qt.Key_Down,
         # Qt.Key_Enter,
 
-        self.sampler.load_sound("space.wav", Qt.Key_W)
-        self.sampler.load_sound("s.wav", Qt.Key_A)
-        self.sampler.load_sound("down.wav", Qt.Key_S)
-        self.sampler.load_sound("d.wav", Qt.Key_D)
+        self.sampler.load_sound("rhythm.wav", Qt.Key_W)
+        self.sampler.load_sound("say.wav", Qt.Key_A)
+        self.sampler.load_sound("thing.wav", Qt.Key_S)
+        self.sampler.load_sound("blupp.wav", Qt.Key_D)
+        self.sampler.load_sound("bass.wav", Qt.Key_Up)
+        self.sampler.load_sound("bass.wav", Qt.Key_Down)
+        self.sampler.load_sound("hihat.wav", Qt.Key_Left)
 
     def keyPressEvent(self, event):
         if (event.modifiers() & Qt.ShiftModifier):
