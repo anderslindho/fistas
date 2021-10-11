@@ -1,16 +1,22 @@
 #!/usr/bin/env python3
 
-import sys
+from argparse import ArgumentParser
 import time
 import wave
+
 import pyaudio
 
-def record_sound(key):
+
+def recorder(key, length):
+    for key in keys:
+        record_sound(key, length)
+
+
+def record_sound(key, length):
     chunk = 4096  # samples per chunk
     sample_format = pyaudio.paInt16  # bits per sample (ADC val)
     channels = 1 # mono/stereo
     freq = 22050  # samples per second
-    clip_length = 2.5 # seconds
     filename = key + '.wav'
     frames = []
     delay = 0.1 # seconds
@@ -23,7 +29,7 @@ def record_sound(key):
                     rate=freq,
                     frames_per_buffer=chunk,
                     input=True)
-    for i in range(0, int(freq / chunk * clip_length)):
+    for i in range(0, int(freq / chunk * length)):
         data = stream.read(chunk)
         frames.append(data)
     stream.stop_stream()
@@ -38,20 +44,16 @@ def record_sound(key):
     wf.writeframes(b''.join(frames))
     wf.close()
 
+
 def main():
-    keys = []
+    parser = ArgumentParser()
+    parser.add_argument("key")
+    parser.add_argument("-l", "--length", type=int)
 
-    if len(sys.argv) == 1:
-        with open('keys.conf', 'r') as f:
-            for line in f:
-                keys.append(line.strip())
-        print(f'Will record {len(keys)} keys')
-        for key in keys:
-            record_sound(key)
-    else:
-        for key in sys.argv[1:]:
-            record_sound(key)
+    args = parser.parse_args()
+
+    record_sound(**vars(args))
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()

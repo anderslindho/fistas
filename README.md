@@ -1,22 +1,18 @@
 # Fistas
-Made for hobby project with Makey-Makey.
 
-Two small scripts and a config file for available keys.
+A lil' sampler made for hobby project with Makey-Makey.
 
-### record 
-Records a 3 sec long wav for each key in mappings.conf
+## Requirements
 
-args: keys that you want to record (e.g. use like `./record w a s d`)
+- Python3.6+
+- portAudio
 
-if no args it will scan all keys in keys.conf
+## Quickstart
 
-### playback
-Listens for keypresses and plays associated audio
+```python
+$ pip install -e .  # from the root of this project
+$ fistas  # player
+$ fistas-record -h  # recorder; e.g. fistas new_sound --length=4
+```
 
-### keys.conf
-Valid keys (for scan-record and for playback)
-
-# Prereqs
-- pyaudio
-- pygame
-- numpy
+Hold shift when pressing a button to loop that sound. Hold ctrl to stop it from playing.
